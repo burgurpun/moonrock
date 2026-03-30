@@ -1,4 +1,4 @@
-# moonrock
+# HappyPak
 Unoffical flatpak for Z64Recomp (not working)
 
 See issue
