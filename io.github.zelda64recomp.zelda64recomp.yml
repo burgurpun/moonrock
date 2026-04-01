@@ -53,6 +53,7 @@ modules:
       #- cp -r /usr/lib/sdk/llvm20/bin/* /app/bin
       #- cp -r /usr/lib/sdk/llvm20/lib/* /app/lib  
 
+      # To save on disk space, use mv instead
       - mv ./llvm/bin/* /app/bin/
       - mv ./llvm/lib/cmake/* /app/lib/cmake/
       - rm -r ./llvm/lib/cmake
