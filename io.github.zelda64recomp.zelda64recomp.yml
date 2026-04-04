@@ -11,60 +11,55 @@ finish-args:
   - --device=usb
   - --device=dri
   - --filesystem=home
-#sdk-extensions:
-#  - org.freedesktop.Sdk.Extension.llvm20
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm22
 #build-options:
 #build-args:
 #  - --share=network
 
 modules:
-# Requirements
+  # Requirements
   - shared-modules/SDL2/SDL2_image.json
   - shared-modules/SDL2/SDL2_ttf.json
 
-
-# Main Build
+  # Main Build
   - name: Zelda64Recompiled
     buildsystem: simple
     sources: 
       - type: git
-        url: https://github.com/Zelda64Recomp/Zelda64Recomp.git
-        tag: v1.2.2
+        #url: https://github.com/Zelda64Recomp/Zelda64Recomp.git
+        url: https://github.com/burgurpun/Zelda64Recomp.git # Needed to use fork, see README
+        branch: testing # Specific to fork
 
       - type: git
         url: https://github.com/N64Recomp/N64Recomp.git
         commit: 81213c1831fab2521a6a5459c67b63437d67e253
         dest: lib/N64Recomp
-      # 2GB dl - 10GB unzipped
-      - type: archive
-        path: LLVM-20.1.8-Linux-X64.tar.xz
-        sha256: 1ead36b3dfcb774b57be530df42bec70ab2d239fbce9889447c7a29a4ddc1ae6
-        dest: llvm
-        strip-components: 1
-     
-        
-    #build-options: # doesn't seem to work wih simple build
-      #- append-path: /usr/lib/sdk/llvm20/bin
-      #- prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
+
+    build-options: 
+      append-path: /usr/lib/sdk/llvm22/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm22/lib
 
     build-commands: 
-      # Clang/LLVM
-      - mkdir -p /app/bin /app/lib/cmake /app/include
-      #- cp -r /usr/lib/sdk/llvm20/bin/* /app/bin
-      #- cp -r /usr/lib/sdk/llvm20/lib/* /app/lib  
-
+      # Clang/LLVM testing related
+      #- mkdir -p /app/bin /app/lib/cmake /app/include
+      #- cp -r /usr/lib/sdk/llvm22/bin/* /app/bin
+      #- cp -r /usr/lib/sdk/llvm22/lib/* /app/lib  
+      - 
       # To save on disk space, use mv instead
-      - mv ./llvm/bin/* /app/bin/
-      - mv ./llvm/lib/cmake/* /app/lib/cmake/
-      - rm -r ./llvm/lib/cmake
-      - mv ./llvm/lib/* /app/lib/
-      - mv ./llvm/include/* /app/include/
+      #- mv ./llvm/bin/* /app/bin/
+      #- mv ./llvm/lib/cmake/* /app/lib/cmake/
+      #- rm -r ./llvm/lib/cmake
+      #- mv ./llvm/lib/* /app/lib/
+      #- mv ./llvm/include/* /app/include/
+      #- ls /app/
+      #- ls /app/bin
 
-      - ls /app/
-      - ls /app/bin
+      - clang -print-targets
+
       - echo "Building patches (mips)"
-      - make -C ./patches CC=clang LD=ld.lld 
-      
+      - make -C patches CC=clang LD=ld.lld 
+
       - echo "Main build"
       - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S ./lib/N64Recomp -B ./lib/N64Recomp/cmake-build
       - cmake --build ./lib/N64Recomp/cmake-build --config Release --target N64Recomp --parallel
@@ -86,5 +81,4 @@ modules:
       - install -Dm644 ./icons/512.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/${FLATPAK_ID}.png,
       - install -Dm644 ./io.github.zelda64recomp.zelda64recomp.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml,
       - install -Dm644 ./io.github.zelda64recomp.zelda64recomp.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
-
-  
+    
