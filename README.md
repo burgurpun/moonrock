@@ -9,8 +9,11 @@ https://github.com/Zelda64Recomp/Zelda64Recomp/issues/694
 **Forks used for testing**
 
 This manifest uses fork of Zelda64Recomp dev branch & fork of RT64 at submodule commit.
-If building with default Zelda64Recomp, ddspp checkout will halt build. 
+If building with default Zelda64Recomp, ddspp checkout will halt build. This is the only reason for using forks, no other changes made. 
 See https://github.com/rt64/rt64/issues/239
+
+- https://github.com/burgurpun/Zelda64Recomp/tree/testing - testing branch
+- https://github.com/burgurpun/rt64/tree/recomp1.2.2 - recomp1.2.2 branch
 
 **Steps** 
 - Setup flatpak & flathub
