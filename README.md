@@ -1,6 +1,9 @@
 # HappyPak
-**(Not Working) not possible to use for Flathub!**
+
+**Not Working, not possible to use for Flathub**
+
 Unoffical flatpak for Z64Recomp, mainly testing for Flathub build. 
+Not maintained, fork as needed.
 
 See issue for more details:
 
